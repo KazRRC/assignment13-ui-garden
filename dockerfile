@@ -1,9 +1,17 @@
-FROM nginx:alpine
+FROM node:20
 
-WORKDIR /Ududec_Kaz_ui_garden
+WORKDIR /ududec_kaz_ui_garden_build_checks
 
-COPY build /usr/share/nginx/html
+COPY package*.json ./
 
-EXPOSE 8083
+RUN npm install
 
-CMD ["nginx", "-g", "daemon off;"]
+COPY . .
+
+RUN npm run build
+
+RUN npm install -g serve
+
+EXPOSE 8018
+
+CMD ["serve", "-s", "build", "-l", "8018"]
